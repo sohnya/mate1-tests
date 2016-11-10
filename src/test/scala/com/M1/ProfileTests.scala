@@ -12,11 +12,9 @@ class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenTh
 
         implicit val patienceConfig = PatienceConfig(timeout = scaled(Span(60, Seconds)), interval = scaled(Span(1, Seconds)))
 
-	login()
+	implicitlyWait(Span(30,Seconds))
 
-	test("Logged in correctly"){
-		currentUrl should include("http://www.mate1.com/nw/index")
-	}
+	login()
 
 	test("'Click here' link on Edit Profile page takes you to the View Profile page")(pending)
 
@@ -30,24 +28,23 @@ class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenTh
 
 	test("Edit image") (pending)
 
-	ignore("Edit profile title"){
-		var newDescription = "My new TEST profile headline"
+	test("Edit profile title"){
+		var newDescription = "Profile title " +r.getInt.toString
 		When("I go to edit profile")
 		goToEditProfile()
-		//Thread.sleep(30000)
 		And("enter a valid description")
 		textField("title").value = newDescription
 		And("click on Save")
 		click on cssSelector("#submit_basic_information")
 		And("go to View Profile")
-		goToViewProfile
-		//Thread.sleep(30000)
+		click on linkText("Click here")
+
 		var profileHeadline = cssSelector(".profileInformationHeadline").element.text
 		Then("the profile headline should the the value I entered")
 		assert(profileHeadline===newDescription)
         }
 
-	ignore("Edit Looking For") {
+	test("Edit Looking For") {
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -60,7 +57,7 @@ class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenTh
 		// TODO : How to verify?
 	}
 
-	ignore("Edit Birth Date") {
+	test("Edit Birth Date") {
 
 		When("I go to edit profile")
 		goToEditProfile()
@@ -77,7 +74,8 @@ class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenTh
 		var age = getAge(day,month,year)
 
 		When("I go to View Profile")
-		goToEditProfile()
+
+		click on linkText("Click here")
 
 		Then("the information should be as I set it")	
 		var profileDescription = ""
@@ -86,45 +84,274 @@ class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenTh
 	}
 
 test("Edit Aged Between") (pending)
-test("Edit Country") (pending)
-test("Edit Postal Code") (pending)
-test("Edit City") (pending)
-test("Edit Ethnicity") (pending)
 
-ignore("Edit Height") {
+test("Edit Country and enter city in Afghanistan"){
+
 		When("I go to edit profile")
 		goToEditProfile()
-		//Thread.sleep(30000)
+
+		And("Choose a country from the list")
+		singleSel("country").value = "4"		
+		country = cssSelector("#country>optgroup[label=Other]>option[value=4]").element.text
+
+		val city = "Kabul "+r.getInt.toString
+		textField("input_city").value = city
+			
+		And("click on the save button")
+		click on cssSelector("#submit_basic_information")
+
+		When("I go to view profile")
+		click on linkText("Click here")
+
+		Then("I should be able to find an element with that country and Postal Code")	
+		xpath("//*[text()='" + city + "']")
+		xpath("//*[text()='" + country + "']")
+}
+
+test("Edit Ethnicity") {
+		When("I go to edit profile")
+		goToEditProfile()
+
+		And("randomly choose an ethnicity")
+		val newEthnicity = selectRandomOption("ethnicity")
+		And("click on the save button")
+		click on cssSelector("#submit_basic_information")
+
+		When("I go to view profile")
+		click on linkText("Click here")
+
+		Then("I should be able to find an element with that ethnicity")	
+		xpath("//*[text()='" + newEthnicity + "']")
+}
+
+test("Edit Height") {
+		When("I go to edit profile")
+		goToEditProfile()
 
 		And("randomly choose a height")
 		val newHeight = selectRandomOption("height")
 		And("click on the save button")
 		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
 
 		When("I go to view profile")
-		goToViewProfile()
-		//Thread.sleep(30000)
+		click on linkText("Click here")
 
-		Then("the height that I find there should be the one I just set")	
-		val heightInViewProfile = cssSelector(".profileInformation> ???").element.text	
-		assert(heightInViewProfile == newHeight)
+		Then("I should be able to find an element with that height")	
+		xpath("//*[text()='" + newHeight + "']")	
 }
 
-test("Edit Body Type") (pending)
-test("Edit Hair Color") (pending)
-test("Edit Relationship") (pending)
-test("Edit Have Children") (pending)
-test("Edit Want (more) Children") (pending)
-test("Edit Religion") (pending)
-test("Edit Field of Study") (pending)
-test("Edit Occupation")(pending)
-test("Edit Education") (pending)
-test("Edit Annual Income") (pending)
-test("Edit Smokes") (pending)
-test("Edit Drinks") (pending)
+test("Edit Body Type"){
+		When("I go to edit profile")
+		goToEditProfile()
 
-test("Edit About myself with valid input and save")(pending)
+		And("randomly choose an ethnicity")
+		val newBodyType = selectRandomOption("bodyType")
+		And("click on the save button")
+		click on cssSelector("#submit_basic_information")
+
+		When("I go to view profile")
+		click on linkText("Click here")
+
+		Then("I should be able to find an element with that body type")	
+		xpath("//*[text()='" + newBodyType + "']")
+}
+
+test("Edit Hair Color"){
+		When("I go to edit profile")
+		goToEditProfile()
+
+		And("randomly choose a hair color")
+		val newHairColor = selectRandomOption("hairColor")
+		And("click on the save button")
+		click on cssSelector("#submit_basic_information")
+
+		When("I go to view profile")
+		click on linkText("Click here")
+
+		Then("I should be able to find an element with that hair color")	
+		xpath("//*[text()='" + newHairColor + "']")
+}
+
+test("Edit Relationship") {
+		When("I go to edit profile")
+		goToEditProfile()
+
+		And("randomly choose a relationship")
+		val newRelationship = selectRandomOption("relationship")
+		And("click on the save button")
+		click on cssSelector("#submit_basic_information")
+
+		When("I go to view profile")
+		click on linkText("Click here")
+
+		Then("I should be able to find an element with that relationship")	
+		xpath("//*[text()='" + newRelationship + "']")
+}
+
+test("Edit Have Children"){
+		When("I go to edit profile")
+		goToEditProfile()
+
+		And("randomly choose a 'Have Children' option")
+		val newHaveChildren = selectRandomOption("children")
+		And("click on the save button")
+		click on cssSelector("#submit_basic_information")
+
+		When("I go to view profile")
+		click on linkText("Click here")
+
+		Then("I should be able to find an element with that 'Have Children'")	
+		xpath("//*[text()='" + newHaveChildren + "']")
+}
+
+test("Edit Want (more) Children"){
+		When("I go to edit profile")
+		goToEditProfile()
+
+		And("randomly choose a 'Want more children' option")
+		val newWantChildren = selectRandomOption("wantChildren")
+		And("click on the save button")
+		click on cssSelector("#submit_basic_information")
+
+		When("I go to view profile")
+		click on linkText("Click here")
+
+		Then("I should be able to find an element with that 'Want children'")	
+		xpath("//*[text()='" + newWantChildren + "']")
+}
+
+test("Edit Religion"){
+		When("I go to edit profile")
+		goToEditProfile()
+
+		And("randomly choose an religion")
+		val newReligion = selectRandomOption("religion")
+		And("click on the save button")
+		click on cssSelector("#submit_basic_information")
+
+		When("I go to view profile")
+		click on linkText("Click here")
+
+		Then("I should be able to find an element with that religion")	
+		xpath("//*[text()='" + newReligion + "']")
+}
+
+test("Edit Field of Study"){
+		When("I go to edit profile")
+		goToEditProfile()
+
+		And("randomly choose a field of study")
+		val newStudy = selectRandomOption("educationField")
+		And("click on the save button")
+		click on cssSelector("#submit_basic_information")
+
+		When("I go to view profile")
+		click on linkText("Click here")
+
+		Then("I should be able to find an element with that field of study")	
+		xpath("//*[text()='" + newStudy + "']")
+}
+
+test("Edit Occupation"){
+		When("I go to edit profile")
+		goToEditProfile()
+
+		And("randomly choose an occupation")
+		val newOccupation = selectRandomOption("occupation")
+		And("click on the save button")
+		click on cssSelector("#submit_basic_information")
+
+		When("I go to view profile")
+		click on linkText("Click here")
+
+		Then("I should be able to find an element with that occupation")	
+		xpath("//*[text()='" + newOccupation + "']")
+}
+
+test("Edit Education"){
+		When("I go to edit profile")
+		goToEditProfile()
+
+		And("randomly choose an education")
+		val newEducation = selectRandomOption("education")
+		And("click on the save button")
+		click on cssSelector("#submit_basic_information")
+
+		When("I go to view profile")
+		click on linkText("Click here")
+
+		Then("I should be able to find an element with that education")	
+		xpath("//*[text()='" + newEducation + "']")
+}
+
+test("Edit Annual Income"){
+		When("I go to edit profile")
+		goToEditProfile()
+
+		And("randomly choose an income")
+		val newIncome = selectRandomOption("income")
+		And("click on the save button")
+		click on cssSelector("#submit_basic_information")
+
+		When("I go to view profile")
+		click on linkText("Click here")
+
+		Then("I should be able to find an element with that annual income")	
+		xpath("//*[text()='" + newIncome + "']")
+}
+
+test("Edit Smokes"){
+		When("I go to edit profile")
+		goToEditProfile()
+
+		And("randomly choose a 'Smokes' option")
+		val newSmokes = selectRandomOption("smokes")
+		And("click on the save button")
+		click on cssSelector("#submit_basic_information")
+
+		When("I go to view profile")
+		click on linkText("Click here")
+
+		Then("I should be able to find an element with that 'Smokes' option")	
+		xpath("//*[text()='" + newSmokes + "']")
+}
+
+test("Edit Drinks"){
+		When("I go to edit profile")
+		goToEditProfile()
+
+		And("randomly choose a 'Drinks' option")
+		val newDrinks = selectRandomOption("drinks")
+		And("click on the save button")
+		click on cssSelector("#submit_basic_information")
+
+		When("I go to view profile")
+		click on linkText("Click here")
+
+		Then("I should be able to find an element with that 'Drinks' option")	
+		xpath("//*[text()='" + newDrinks + "']")
+}
+
+
+test("Edit About myself with valid input and save"){
+
+		var newAboutMyself = "This is me :" + r.nextInt().toString
+		When("I go to edit profile")
+		goToEditProfile()
+		And("enter valid text")
+		textField("#aboutMyself").value = newDescription
+		And("click on Save")
+		click on cssSelector("#submit_about_myself")
+		And("go to View Profile")
+		click on linkText("Click here")
+
+		var aboutMyself = cssSelector("about_myself>p").element.text
+		Then("the profile headline should the the value I entered")
+		assert(aboutMyself===newAboutMyself)
+
+
+}
+
 test("Edit About myself with empty text and save")(pending)
 test("Edit About myself with valid input and cancel")(pending)
 test("Edit About myself with email and save")(pending)
@@ -142,11 +369,9 @@ test("Tick a checkbox, save, and see the corresponding field in View Profile"){
 		goToEditProfile()
 
 		And("tick three textboxes")
-		eventually {
 		checkbox(cssSelector("#diet_3")).select()
 		checkbox(cssSelector("#diet_7")).select()
 		checkbox(cssSelector("#diet_11")).select()
-		}
 
 		And("Get the text corresponding to these checkboxes")
 		var label1 = cssSelector("#label_diet[for=diet_3]").element.text
@@ -159,15 +384,16 @@ test("Tick a checkbox, save, and see the corresponding field in View Profile"){
                 click on cssSelector("#submit_lifestyle_interests")
 
 		And("Go to view profile")
-		//goToViewProfile()
-		eventually { click on linkText("Click here") }
+		click on linkText("Click here")
 	
-		// Check that the corresponding section contains these choices.	
-		
-		var dietText
-		eventually {var dietText = cssSelector("#lifestyle_interests>ul.oneColumn.left>li").element.text	}
+		Then("Diet text should contain the Diet choices")
+
+		var dietText = ""
+		dietText = cssSelector("#lifestyle_interests>ul.oneColumn.left>li").element.text
 		assert(dietText.contains(label1))
 }
+
+		//eventually { dietText = xpath("//div[@id='lifestyle_interests']/ul/li[0]").element.text }
 
 ignore("Untick a checkbox, save, and see the corresponding field in View Profile"){
 
@@ -176,11 +402,9 @@ ignore("Untick a checkbox, save, and see the corresponding field in View Profile
 		goToEditProfile()
 
 		// Untick the three boxes selected before
-		eventually {
 		checkbox(cssSelector("#diet_7")).select()
 		checkbox(cssSelector("#diet_11")).select()
 		checkbox(cssSelector("#diet_3")).select()
-		}
 
 		// Get the text corresponding to these checkboxes
 		var label1 = cssSelector("#label_diet[for=diet_3]").element.text
@@ -190,9 +414,7 @@ ignore("Untick a checkbox, save, and see the corresponding field in View Profile
                 click on cssSelector("#submit_lifestyle_interests")
 
 		// Go to View Profile
-		//When("I go to view profile")
-		//goToViewProfile()
-		eventually { click on linkText("Click here") }
+		click on linkText("Click here")
 
 		// Check that the corresponding section contains
 }
@@ -221,22 +443,22 @@ def calculateAge(year: Int, month:String, day: Int) : Int = {
 
 }
 
-def goToViewProfile() : Unit = {
+/**def goToViewProfile() : Unit = {
 		click on cssSelector("#profile_dd")
 		click on cssSelector("#profile_dd_li>ul>li>a[title='View Profile']")
-		eventually { click on cssSelector("profileInformationHeadline")}
-}	
+		click on cssSelector("profileInformationHeadline")
+}*/	
 
 def goToEditProfile() : Unit = {
 		click on cssSelector("#profile_dd")
 		click on cssSelector("#profile_dd_li>ul>li>a[title='Edit Profile']")
-		eventually { click on id("title") } 
+		click on id("title")
 }	
 
 def getOptionsBySelectName(name: String) : List[String] = {
 
 	// Check that the select element is there to give an appropriate error when it's not there
-        eventually { click on xpath("//select[@name='" + name + "']/option[1]") }
+        click on xpath("//select[@name='" + name + "']/option[1]")
 
 	return findAll(xpath("//select[@name='" + name + "']/option")).map{ _.text }.toList
 	}
@@ -255,10 +477,11 @@ def selectRandomOption(selectName: String) : String = {
 	var optionNumber = r.nextInt(options.size) 
 	var optionName = options(optionNumber)
 
+	And("get its value using xpath")
 	var optionValue = xpath("//select[@name='" + selectName + "']/option["+optionNumber +"]").element.attribute("value").getOrElse("Not found")
 
 	// Select this option
-	And("Select the option"+optionValue)
+	And("Select the option "+optionName)
 	singleSel(selectName).value = optionValue
 	
 	return optionName
@@ -297,15 +520,17 @@ def selectRandomOption(selectName: String) : String = {
 			return age
 		}
 
+  /**
+   * @return Logs in using (for the moment) fixed email and password,
+   * by going to the website, clicking on the 'Login here' link, 
+   * writing login information in the following iframe, and clicking "Save"
+   */
+
    def login( ) : Unit = {
 	go to "http://www.mate1.com"
 
-	//Thread.sleep(1000)
-
 	// Click on the link 'Login here'
-	eventually { click on linkText("Login here") }
-	
-	Thread.sleep(3000)
+	click on linkText("Login here")
 
 	// Switch to the login iframe
 	switch to frame(cssSelector("#ajax_flow_holder>.iframe-container>iframe"))
@@ -319,8 +544,6 @@ def selectRandomOption(selectName: String) : String = {
 	// And click on the Login button
 
 	submit()
-
-	Thread.sleep(5000)
    }
 
 }
