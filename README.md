@@ -9,6 +9,11 @@ Pass : Sosecret1
 To clone this project, do 
 git clone https://github.com/sohnya/mate1-tests.git
 
-Test results can be found in the folder "reports"
+To run the tests (assuming sbt is installed), do
+test sbt
+
+Note: By default, the tests are set to ignore.
+
+Test results can be found in the folder "reports". 
 
 
