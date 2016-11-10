@@ -16,20 +16,20 @@ class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenTh
 
 	login()
 
-	test("'Click here' link on Edit Profile page takes you to the View Profile page")(pending)
+	ignore("'Click here' link on Edit Profile page takes you to the View Profile page")(pending)
 
-	test("'Edit or complete' link on View Profile page takes you to the Edit Profile page")(pending)
+	ignore("'Edit or complete' link on View Profile page takes you to the Edit Profile page")(pending)
 
-	test("Clicking on 'edit or update photo' takes you to the update photo page")(pending)
+	ignore("Clicking on 'edit or update photo' takes you to the update photo page")(pending)
 
-	test("Clicking on 'update photo' button enables you to choose from your file system")(pending)
+	ignore("Clicking on 'update photo' button enables you to choose from your file system")(pending)
 
-	test("Clicking on 'Use my Facebook picture' button opens a popup with title Facebook")(pending)
+	ignore("Clicking on 'Use my Facebook picture' button opens a popup with title Facebook")(pending)
 
-	test("Edit image") (pending)
+	ignore("Edit image") (pending)
 
-	test("Edit profile title"){
-		var newDescription = "Profile title " +r.getInt.toString
+	ignore("Edit profile title"){ //OK
+		var newDescription = "Profile title " +r.nextInt().toString
 		When("I go to edit profile")
 		goToEditProfile()
 		And("enter a valid description")
@@ -44,7 +44,7 @@ class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenTh
 		assert(profileHeadline===newDescription)
         }
 
-	test("Edit Looking For") {
+	ignore("Edit Looking For") {
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -83,18 +83,18 @@ class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenTh
 		assert(profileDescription.contains(age.toString))
 	}
 
-test("Edit Aged Between") (pending)
+ignore("Edit Aged Between") (pending)
 
-test("Edit Country and enter city in Afghanistan"){
+ignore("Edit Country and enter city in Afghanistan"){
 
 		When("I go to edit profile")
 		goToEditProfile()
 
 		And("Choose a country from the list")
 		singleSel("country").value = "4"		
-		country = cssSelector("#country>optgroup[label=Other]>option[value=4]").element.text
+		val country = cssSelector("#country>optgroup[label=Other]>option[value=4]").element.text
 
-		val city = "Kabul "+r.getInt.toString
+		val city = "Kabul "+r.nextInt().toString
 		textField("input_city").value = city
 			
 		And("click on the save button")
@@ -108,7 +108,7 @@ test("Edit Country and enter city in Afghanistan"){
 		xpath("//*[text()='" + country + "']")
 }
 
-test("Edit Ethnicity") {
+ignore("Edit Ethnicity") {
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -124,7 +124,7 @@ test("Edit Ethnicity") {
 		xpath("//*[text()='" + newEthnicity + "']")
 }
 
-test("Edit Height") {
+ignore("Edit Height") {
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -140,7 +140,7 @@ test("Edit Height") {
 		xpath("//*[text()='" + newHeight + "']")	
 }
 
-test("Edit Body Type"){
+ignore("Edit Body Type"){
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -156,7 +156,7 @@ test("Edit Body Type"){
 		xpath("//*[text()='" + newBodyType + "']")
 }
 
-test("Edit Hair Color"){
+ignore("Edit Hair Color"){
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -172,7 +172,7 @@ test("Edit Hair Color"){
 		xpath("//*[text()='" + newHairColor + "']")
 }
 
-test("Edit Relationship") {
+ignore("Edit Relationship") {
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -188,7 +188,7 @@ test("Edit Relationship") {
 		xpath("//*[text()='" + newRelationship + "']")
 }
 
-test("Edit Have Children"){
+ignore("Edit Have Children"){
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -204,7 +204,7 @@ test("Edit Have Children"){
 		xpath("//*[text()='" + newHaveChildren + "']")
 }
 
-test("Edit Want (more) Children"){
+ignore("Edit Want (more) Children"){
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -220,7 +220,7 @@ test("Edit Want (more) Children"){
 		xpath("//*[text()='" + newWantChildren + "']")
 }
 
-test("Edit Religion"){
+ignore("Edit Religion"){
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -236,7 +236,7 @@ test("Edit Religion"){
 		xpath("//*[text()='" + newReligion + "']")
 }
 
-test("Edit Field of Study"){
+ignore("Edit Field of Study"){
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -252,7 +252,7 @@ test("Edit Field of Study"){
 		xpath("//*[text()='" + newStudy + "']")
 }
 
-test("Edit Occupation"){
+ignore("Edit Occupation"){
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -268,7 +268,7 @@ test("Edit Occupation"){
 		xpath("//*[text()='" + newOccupation + "']")
 }
 
-test("Edit Education"){
+ignore("Edit Education"){
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -284,7 +284,7 @@ test("Edit Education"){
 		xpath("//*[text()='" + newEducation + "']")
 }
 
-test("Edit Annual Income"){
+ignore("Edit Annual Income"){
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -300,7 +300,7 @@ test("Edit Annual Income"){
 		xpath("//*[text()='" + newIncome + "']")
 }
 
-test("Edit Smokes"){
+ignore("Edit Smokes"){
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -316,7 +316,7 @@ test("Edit Smokes"){
 		xpath("//*[text()='" + newSmokes + "']")
 }
 
-test("Edit Drinks"){
+ignore("Edit Drinks"){
 		When("I go to edit profile")
 		goToEditProfile()
 
@@ -333,37 +333,35 @@ test("Edit Drinks"){
 }
 
 
-test("Edit About myself with valid input and save"){
+ignore("Edit About myself with valid input and save"){
 
 		var newAboutMyself = "This is me :" + r.nextInt().toString
 		When("I go to edit profile")
 		goToEditProfile()
 		And("enter valid text")
-		textField("#aboutMyself").value = newDescription
+		textField("#aboutMyself").value = newAboutMyself
 		And("click on Save")
 		click on cssSelector("#submit_about_myself")
 		And("go to View Profile")
 		click on linkText("Click here")
 
 		var aboutMyself = cssSelector("about_myself>p").element.text
-		Then("the profile headline should the the value I entered")
+		Then("the textfield should the the value I entered")
 		assert(aboutMyself===newAboutMyself)
-
-
 }
 
-test("Edit About myself with empty text and save")(pending)
-test("Edit About myself with valid input and cancel")(pending)
-test("Edit About myself with email and save")(pending)
-test("Edit About myself with url and save")(pending)
+ignore("Edit About myself with empty text and save")(pending)
+ignore("Edit About myself with valid input and cancel")(pending)
+ignore("Edit About myself with email and save")(pending)
+ignore("Edit About myself with url and save")(pending)
 
-test("Edit What I'm looking for with valid input and save")(pending)
-test("Edit What I'm looking for with empty text and save")(pending)
-test("Edit What I'm looking for with valid input and cancel")(pending)
-test("Edit What I'm looking for with email and save")(pending)
-test("Edit What I'm looking for with url and save")(pending)
+ignore("Edit What I'm looking for with valid input and save")(pending)
+ignore("Edit What I'm looking for with empty text and save")(pending)
+ignore("Edit What I'm looking for with valid input and cancel")(pending)
+ignore("Edit What I'm looking for with email and save")(pending)
+ignore("Edit What I'm looking for with url and save")(pending)
 
-test("Tick a checkbox, save, and see the corresponding field in View Profile"){
+ignore("Tick a checkbox, save, and see the corresponding field in View Profile"){
 
 		When("I go to Edit Profile")
 		goToEditProfile()
@@ -391,9 +389,9 @@ test("Tick a checkbox, save, and see the corresponding field in View Profile"){
 		var dietText = ""
 		dietText = cssSelector("#lifestyle_interests>ul.oneColumn.left>li").element.text
 		assert(dietText.contains(label1))
+		assert(dietText.contains(label2))
+		assert(dietText.contains(label3))
 }
-
-		//eventually { dietText = xpath("//div[@id='lifestyle_interests']/ul/li[0]").element.text }
 
 ignore("Untick a checkbox, save, and see the corresponding field in View Profile"){
 
@@ -402,13 +400,14 @@ ignore("Untick a checkbox, save, and see the corresponding field in View Profile
 		goToEditProfile()
 
 		// Untick the three boxes selected before
-		checkbox(cssSelector("#diet_7")).select()
-		checkbox(cssSelector("#diet_11")).select()
-		checkbox(cssSelector("#diet_3")).select()
+		checkbox(cssSelector("#diet_7")).clear()
+		checkbox(cssSelector("#diet_11")).clear()
+		checkbox(cssSelector("#diet_3")).clear()
 
-		// Get the text corresponding to these checkboxes
+		// Save their labels
 		var label1 = cssSelector("#label_diet[for=diet_3]").element.text
-		info(label1)
+		var label2 = cssSelector("#label_diet[for=diet_7]").element.text
+		var label3 = cssSelector("#label_diet[for=diet_11]").element.text
 	
 		// Click on save
                 click on cssSelector("#submit_lifestyle_interests")
@@ -416,22 +415,43 @@ ignore("Untick a checkbox, save, and see the corresponding field in View Profile
 		// Go to View Profile
 		click on linkText("Click here")
 
-		// Check that the corresponding section contains
+		// Check that the corresponding section does not contain this text
+		var dietText = ""
+		dietText = cssSelector("#lifestyle_interests>ul.oneColumn.left>li").element.text
+		assert(!dietText.contains(label1))
+		assert(!dietText.contains(label2))
+		assert(!dietText.contains(label3))
 }
 
-test("Add three fields at random in Favorite things, and validate them in View Profile"){
+ignore("Add a field at random in Favorite things, and validate them in View Profile"){
+
+	When("I go to Edit Profile")
+	goToEditProfile()
 
 	// Find the div that contains the Favorite things
 
-	// Select three at random, and enter text in them. Save the labels.
+	val favoriteThing = "New favorite thing" + r.nextInt().toString
 
-	// Go to View profile
+	val numberOfFields = 36 // TODO: Make this flexible
+	val listItem = r.nextInt(numberOfFields-1).toString
+	val xPathToListItem = "//div[@id='favorite_things']/ul[@class='specifics']/li["+ listItem
+	val listItemLabel = xpath(xPathToListItem+"]/label").element.text
 
-	// Check that there are three fields with the corresponding labels.
+	And("set the textField ")
+	textField(xpath(xPathToListItem+"]/input")).value = favoriteThing
 
+	And("The textfield's value is now : " + textField(xpath(xPathToListItem+"]/input")).value)
+
+	click on id("submit_favorite_things")
+
+	click on linkText("Click here")
+
+	// In View Profile,
+	// <div> favorite_things should have at least one <li> item with favoriteThing
+	click on ("//*[text()=' " + favoriteThing + "']")
 }
 
-test("Remove the three fields from Favorite things, and validate them in View Profile")(pending)
+ignore("Remove the three fields from Favorite things, and validate them in View Profile")(pending)
 
 def calculateAge(year: Int, month:String, day: Int) : Int = {
 
@@ -442,12 +462,6 @@ def calculateAge(year: Int, month:String, day: Int) : Int = {
 	return 0;
 
 }
-
-/**def goToViewProfile() : Unit = {
-		click on cssSelector("#profile_dd")
-		click on cssSelector("#profile_dd_li>ul>li>a[title='View Profile']")
-		click on cssSelector("profileInformationHeadline")
-}*/	
 
 def goToEditProfile() : Unit = {
 		click on cssSelector("#profile_dd")
@@ -513,9 +527,9 @@ def selectRandomOption(selectName: String) : String = {
 			var age = 0	
 
 			if(monthInt < currentMonth || (monthInt==currentMonth && day <= currentDay)){
-				age = currentYear - year
-			}else{
 				age = currentYear - year - 1
+			}else{
+				age = currentYear - year - 2
 			}
 			return age
 		}
