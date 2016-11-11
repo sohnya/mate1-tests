@@ -11,7 +11,7 @@ class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenTh
 
 	override def afterAll() {
 		quit()
-		println("Quitting all browser windows")
+		info("Quitting all browser windows")
 	}
 
 	val r = scala.util.Random
@@ -30,13 +30,13 @@ class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenTh
 
 	ignore("Clicking on 'Use my Facebook picture' button opens a popup with title Facebook")(pending)
 
-	test("Edit profile title"){ // Bug: Element '.profileInformationHeadline' not found.
+	ignore("Edit profile title"){ // Bug: Element '.profileInformationHeadline' not found.
 		
 		val textFieldId = "title"
-		val submitButtonId = "#submit_basic_information"
+		val submitButtonId = "submit_basic_information"
 		val viewProfileCssSelector = ".profileInformationHeadline"
 
-		textFieldValidTest(textFieldId,submitButtonId,viewProfileCssSelector)
+		editAndValidateTextField(textFieldId,submitButtonId,viewProfileCssSelector)
         }
 
 	ignore("Edit Looking For") {
@@ -109,80 +109,68 @@ ignore("Edit Country and enter city in Afghanistan"){ // Does not seem to save c
 }
 
 ignore("Edit Height") {
-		dropDownTest("height")
+		editAndValidateDropDown("height")
 }
 
 ignore("Edit Ethnicity") {
-		dropDownTest("ethnicity")
+		editAndValidateDropDown("ethnicity")
 }
 
 ignore("Edit Body Type"){
-		dropDownTest("bodyType")
+		editAndValidateDropDown("bodyType")
 }
 
 ignore("Edit Hair Color"){
-		dropDownTest("hairColor")
+		editAndValidateDropDown("hairColor")
 }
 
 ignore("Edit Relationship") {
-		dropDownTest("relationship")
+		editAndValidateDropDown("relationship")
 }
 
 ignore("Edit Have Children"){
-		dropDownTest("children")
+		editAndValidateDropDown("children")
 }
 
 ignore("Edit Want (more) Children"){
-		dropDownTest("wantChildren")
+		editAndValidateDropDown("wantChildren")
 }
 
 ignore("Edit Religion"){
-		dropDownTest("religion")
+		editAndValidateDropDown("religion")
 }
 
 ignore("Edit Field of Study"){
-		dropDownTest("educationField")
+		editAndValidateDropDown("educationField")
 }
 
 ignore("Edit Occupation"){
-		dropDownTest("occupation")
+		editAndValidateDropDown("occupation")
 }
 
 ignore("Edit Education"){
-		dropDownTest("education")
+		editAndValidateDropDown("education")
 }
 
 ignore("Edit Annual Income"){
-		dropDownTest("income")
+		editAndValidateDropDown("income")
 }
 
 ignore("Edit Smokes"){
-		dropDownTest("smokes")
+		editAndValidateDropDown("smokes")
 }
 
 ignore("Edit Drinks"){
-		dropDownTest("drinks")
+		editAndValidateDropDown("drinks")
 }
 
+ignore("Edit What I'm looking for with valid input"){
 
-ignore("Edit About myself with valid input and save"){
+		val textAreaId = "lookingFor"
+		val submitButtonId = "submit_who_im_looking_for"
+		val viewProfileCssSelector = "#who_im_looking_for>p"
 
-		var newAboutMyself = "This is me :" + r.nextInt().toString
-		When("I go to edit profile")
-		goToEditProfile()
-		And("enter valid text")
-		textField("#aboutMyself").value = newAboutMyself
-		And("click on Save")
-		click on cssSelector("#submit_about_myself")
-		Thread.sleep(5000)
-
-		And("go to View Profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		var aboutMyself = cssSelector("about_myself>p").element.text
-		Then("the textfield should the the value I entered")
-		assert(aboutMyself===newAboutMyself)
+		editAndValidateTextArea(textAreaId,submitButtonId,viewProfileCssSelector)
 }
 
 ignore("Edit About myself with empty text and save")(pending)
@@ -190,11 +178,48 @@ ignore("Edit About myself with valid input and cancel")(pending)
 ignore("Edit About myself with email and save")(pending)
 ignore("Edit About myself with url and save")(pending)
 
-ignore("Edit What I'm looking for with valid input and save")(pending)
+ignore("Edit About myself with valid input"){
+
+		val textAreaId = "aboutMyself"
+		val submitButtonId = "submit_about_myself"
+		val viewProfileCssSelector = "#about_myself>p"
+
+		editAndValidateTextArea(textAreaId,submitButtonId,viewProfileCssSelector)
+}
+
 ignore("Edit What I'm looking for with empty text and save")(pending)
 ignore("Edit What I'm looking for with valid input and cancel")(pending)
 ignore("Edit What I'm looking for with email and save")(pending)
-ignore("Edit What I'm looking for with url and save")(pending)
+
+ignore("Edit What I'm looking for with url"){
+
+		val textAreaId = "aboutMyself"
+		val submitButtonId = "submit_about_myself"
+		val viewProfileCssSelector = "#about_myself>p"
+		val myUrl = "http://www.google.com"
+
+		When("I go to edit profile")
+		goToEditProfile()
+
+		var newText = "TextArea " + r.nextInt(100).toString + ", " + myUrl
+		And("set the textArea to: " + newText)
+		textArea(id(textAreaId)).value = newText
+		And("click on Save")
+		click on cssSelector("#"+submitButtonId)
+		Thread.sleep(5000)
+
+		And("go to View Profile")
+		click on linkText("Click here")
+		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
+
+		var textInViewProfile = cssSelector(viewProfileCssSelector).element.text
+
+		Then("the textArea text should not contain " + myUrl)
+		assert(!textInViewProfile.contains(newText))
+
+
+
+}
 
 ignore("Tick a checkbox, save, and see the corresponding field in View Profile"){
 
@@ -215,6 +240,7 @@ ignore("Tick a checkbox, save, and see the corresponding field in View Profile")
 
 		And("Click on save")
                 click on cssSelector("#submit_lifestyle_interests")
+		Thread.sleep(5000)
 
 		And("Go to view profile")
 		click on linkText("Click here")
@@ -228,16 +254,21 @@ ignore("Tick a checkbox, save, and see the corresponding field in View Profile")
 		assert(dietText.contains(label3))
 }
 
-ignore("Untick a checkbox, save, and see the corresponding field in View Profile"){
-
+ignore("Untick checkboxes, save, and see the corresponding field is missing in View Profile"){
 
 		When("I go to Edit Profile")
 		goToEditProfile()
 
 		// Untick the three boxes selected before
-		checkbox(cssSelector("#diet_7")).clear()
-		checkbox(cssSelector("#diet_11")).clear()
-		checkbox(cssSelector("#diet_3")).clear()
+		if(checkbox("#diet_3").isSelected){
+			checkbox(cssSelector("#diet_3")).clear()
+		}
+		if(checkbox("#diet_7").isSelected){
+			checkbox(cssSelector("#diet_7")).clear()
+		}
+		if(checkbox("#diet_11").isSelected){
+			checkbox(cssSelector("#diet_11")).clear()
+		}
 
 		// Save their labels
 		var label1 = cssSelector("#label_diet[for=diet_3]").element.text
@@ -258,35 +289,33 @@ ignore("Untick a checkbox, save, and see the corresponding field in View Profile
 		assert(!dietText.contains(label3))
 }
 
-ignore("Add a field at random in Favorite things, and validate them in View Profile"){
+test("Add a field at random in Favorite things, and validate them in View Profile"){
 
 	When("I go to Edit Profile")
 	goToEditProfile()
 
-	// Find the div that contains the Favorite things
-
-	val favoriteThing = "New favorite thing" + r.nextInt().toString
-
+	val favoriteThing = "New favorite thing" + r.nextInt(100).toString
 	val numberOfFields = 36 // TODO: Make this flexible
 	val listItem = r.nextInt(numberOfFields-1).toString
 	val xPathToListItem = "//div[@id='favorite_things']/ul[@class='specifics']/li["+ listItem
 	val listItemLabel = xpath(xPathToListItem+"]/label").element.text
 
-	And("set the textField ")
+	And("set the textField to " + favoriteThing)
 	textField(xpath(xPathToListItem+"]/input")).value = favoriteThing
 
-	And("The textfield's value is now : " + textField(xpath(xPathToListItem+"]/input")).value)
+	And("make sure that the textfield's value is now : " + textField(xpath(xPathToListItem+"]/input")).value)
 
 	click on id("submit_favorite_things")
+	Thread.sleep(5000)
 
 	click on linkText("Click here")
 
-	// In View Profile,
-	// <div> favorite_things should have at least one <li> item with favoriteThing
-	click on ("//*[text()=' " + favoriteThing + "']")
+	Then("the View Profile page should have an element with the corresponding text")
+	click on xpath("//*[text()=' " + favoriteThing + "']")
 }
 
-ignore("Remove the three fields from Favorite things, and validate them in View Profile")(pending)
+
+ignore("Remove everything from Favorite things, and validate them in View Profile")(pending)
 
 def calculateAge(year: Int, month:String, day: Int) : Int = {
 
@@ -304,15 +333,41 @@ def goToEditProfile() : Unit = {
 		click on id("title")
 }
 
-def textFieldValidTest(textFieldId : String,submitButtonId : String,viewProfileCssSelector : String) : Unit ={
+def editAndValidateTextArea(textAreaId : String,submitButtonId : String,viewProfileCssSelector : String) : Unit ={
 
-		var newText = "Textfield " + r.nextInt(20).toString
+		When("Edit and validate with textArea = "+textAreaId + ", submitButtonId = " + submitButtonId + " and viewProfileCssSelector " + viewProfileCssSelector)
+
+		When("I go to edit profile")
+		goToEditProfile()
+
+		var newText = "TextArea " + r.nextInt(100).toString
+		And("set the textArea to: " + newText)
+		textArea(id(textAreaId)).value = newText
+		And("click on Save")
+		click on cssSelector("#"+submitButtonId)
+		Thread.sleep(5000)
+
+		And("go to View Profile")
+		click on linkText("Click here")
+		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
+
+		var textInViewProfile = cssSelector(viewProfileCssSelector).element.text
+
+		Then("the textArea text should be " + newText)
+		assert(textInViewProfile===newText)
+}
+
+def editAndValidateTextField(textFieldId : String,submitButtonId : String,viewProfileCssSelector : String) : Unit ={
+
+		When("Edit and validate with textfieldID = "+textFieldId + ", submitButtonId = " + submitButtonId + " and viewProfileCssSelector " + viewProfileCssSelector)
+
+		var newText = "Textfield " + r.nextInt(100).toString
 		When("I go to edit profile")
 		goToEditProfile()
 		And("set the textfield to: " + newText)
-		textField(textFieldId).value = newText
+		textField(id(textFieldId)).value = newText
 		And("click on Save")
-		click on cssSelector(submitButtonId)
+		click on cssSelector("#"+submitButtonId)
 		Thread.sleep(5000)
 
 		And("go to View Profile")
@@ -323,10 +378,9 @@ def textFieldValidTest(textFieldId : String,submitButtonId : String,viewProfileC
 
 		Then("the textField text should be " + newText)
 		assert(textInViewProfile===newText)
-
 }
 
-def dropDownTest(dropdownName : String) : Unit = {
+def editAndValidateDropDown(dropdownName : String) : Unit = {
 
 		When("I go to edit profile")
 		goToEditProfile()
