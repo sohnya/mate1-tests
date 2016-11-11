@@ -30,26 +30,13 @@ class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenTh
 
 	ignore("Clicking on 'Use my Facebook picture' button opens a popup with title Facebook")(pending)
 
-	ignore("Edit profile title"){ // Bug: Element '.profileInformationHeadline' not found.
-		var newDescription = "Test Profile title " + r.nextInt(20).toString
-		When("I go to edit profile")
-		goToEditProfile()
-		And("enter a valid description: " + newDescription)
-		textField("title").value = newDescription
-		And("click on Save")
-		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
+	test("Edit profile title"){ // Bug: Element '.profileInformationHeadline' not found.
+		
+		val textFieldId = "title"
+		val submitButtonId = "#submit_basic_information"
+		val viewProfileCssSelector = ".profileInformationHeadline"
 
-		And("go to View Profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		var profileHeadline = cssSelector(".profileInformationHeadline").element.text
-
-		info("New profile headline is " + profileHeadline)
-
-		Then("the profile headline should the the value I entered")
-		assert(profileHeadline===newDescription)
+		textFieldValidTest(textFieldId,submitButtonId,viewProfileCssSelector)
         }
 
 	ignore("Edit Looking For") {
@@ -178,7 +165,7 @@ ignore("Edit Drinks"){
 }
 
 
-test("Edit About myself with valid input and save"){
+ignore("Edit About myself with valid input and save"){
 
 		var newAboutMyself = "This is me :" + r.nextInt().toString
 		When("I go to edit profile")
@@ -315,6 +302,28 @@ def goToEditProfile() : Unit = {
 		click on cssSelector("#profile_dd")
 		click on cssSelector("#profile_dd_li>ul>li>a[title='Edit Profile']")
 		click on id("title")
+}
+
+def textFieldValidTest(textFieldId : String,submitButtonId : String,viewProfileCssSelector : String) : Unit ={
+
+		var newText = "Textfield " + r.nextInt(20).toString
+		When("I go to edit profile")
+		goToEditProfile()
+		And("set the textfield to: " + newText)
+		textField(textFieldId).value = newText
+		And("click on Save")
+		click on cssSelector(submitButtonId)
+		Thread.sleep(5000)
+
+		And("go to View Profile")
+		click on linkText("Click here")
+		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
+
+		var textInViewProfile = cssSelector(viewProfileCssSelector).element.text
+
+		Then("the textField text should be " + newText)
+		assert(textInViewProfile===newText)
+
 }
 
 def dropDownTest(dropdownName : String) : Unit = {
