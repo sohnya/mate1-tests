@@ -7,7 +7,12 @@ import org.scalatest.time.Millis
 import org.scalatest.time.Seconds
 import java.util.logging._
 
-class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenThen with BeforeAndAfter {
+class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenThen with BeforeAndAfterAll {
+
+	override def afterAll() {
+		quit()
+		println("Quitting all browser windows")
+	}
 
 	val r = scala.util.Random
 
@@ -26,7 +31,7 @@ class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenTh
 	ignore("Clicking on 'Use my Facebook picture' button opens a popup with title Facebook")(pending)
 
 	ignore("Edit profile title"){ // Bug: Element '.profileInformationHeadline' not found.
-		var newDescription = "Test Profile title " +r.nextInt(20).toString
+		var newDescription = "Test Profile title " + r.nextInt(20).toString
 		When("I go to edit profile")
 		goToEditProfile()
 		And("enter a valid description: " + newDescription)
@@ -116,263 +121,64 @@ ignore("Edit Country and enter city in Afghanistan"){ // Does not seem to save c
 		click on xpath("//*[text()='" + country + "']")
 }
 
-ignore("Edit Ethnicity") { // OK
-		When("I go to edit profile")
-		goToEditProfile()
-
-		And("randomly choose an ethnicity")
-		val newEthnicity = selectRandomOption("ethnicity")
-		And("click on the save button")
-		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
-
-		When("I go to view profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		Thread.sleep(10000)
-		info(pageSource)
-
-		Then("I should be able to find an element with that ethnicity")	
-		click on xpath("//*[text()='" + newEthnicity + "']")
+ignore("Edit Height") {
+		dropDownTest("height")
 }
 
-test("Edit Height") { // OK
-		When("I go to edit profile")
-		goToEditProfile()
-
-		And("randomly choose a height")
-		val newHeight = selectRandomOption("height")
-		And("click on the save button")
-		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
-
-		When("I go to view profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		Then("I should be able to find an element with height = " + newHeight)	
-		click on xpath("//*[text()='" + newHeight + "']")	
+ignore("Edit Ethnicity") {
+		dropDownTest("ethnicity")
 }
 
-ignore("Edit Body Type"){ // WebElement '//*[text()='Athletic']' not found, but it is changed in profile.
-		When("I go to edit profile")
-		goToEditProfile()
-
-		And("randomly choose a body type")
-		val newBodyType = selectRandomOption("bodyType")
-		And("click on the save button")
-		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
-
-		When("I go to view profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		Then("I should be able to find an element with that body type")	
-		click on xpath("//*[text()='" + newBodyType + "']")
+ignore("Edit Body Type"){
+		dropDownTest("bodyType")
 }
 
 ignore("Edit Hair Color"){
-		When("I go to edit profile")
-		goToEditProfile()
-
-		And("randomly choose a hair color")
-		val newHairColor = selectRandomOption("hairColor")
-		And("click on the save button")
-		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
-
-		When("I go to view profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		Then("I should be able to find an element with that hair color")	
-		click on xpath("//*[text()='" + newHairColor + "']")
+		dropDownTest("hairColor")
 }
 
 ignore("Edit Relationship") {
-		When("I go to edit profile")
-		goToEditProfile()
-
-		And("randomly choose a relationship")
-		val newRelationship = selectRandomOption("relationship")
-		And("click on the save button")
-		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
-
-		When("I go to view profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		Then("I should be able to find an element with that relationship")	
-		click on xpath("//*[text()='" + newRelationship + "']")
+		dropDownTest("relationship")
 }
 
 ignore("Edit Have Children"){
-		When("I go to edit profile")
-		goToEditProfile()
-
-		And("randomly choose a 'Have Children' option")
-		val newHaveChildren = selectRandomOption("children")
-		And("click on the save button")
-		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
-
-		When("I go to view profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		Then("I should be able to find an element with that 'Have Children'")	
-		click on xpath("//*[text()='" + newHaveChildren + "']")
+		dropDownTest("children")
 }
 
 ignore("Edit Want (more) Children"){
-		When("I go to edit profile")
-		goToEditProfile()
-
-		And("randomly choose a 'Want more children' option")
-		val newWantChildren = selectRandomOption("wantChildren")
-		And("click on the save button")
-		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
-
-		When("I go to view profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		Then("I should be able to find an element with that 'Want children'")	
-		click on xpath("//*[text()='" + newWantChildren + "']")
+		dropDownTest("wantChildren")
 }
 
 ignore("Edit Religion"){
-		When("I go to edit profile")
-		goToEditProfile()
-
-		And("randomly choose an religion")
-		val newReligion = selectRandomOption("religion")
-		And("click on the save button")
-		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
-
-		When("I go to view profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		Then("I should be able to find an element with that religion")	
-		click on xpath("//*[text()='" + newReligion + "']")
+		dropDownTest("religion")
 }
 
 ignore("Edit Field of Study"){
-		When("I go to edit profile")
-		goToEditProfile()
-
-		And("randomly choose a field of study")
-		val newStudy = selectRandomOption("educationField")
-		And("click on the save button")
-		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
-
-		When("I go to view profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		Then("I should be able to find an element with that field of study")	
-		click on xpath("//*[text()='" + newStudy + "']")
+		dropDownTest("educationField")
 }
 
 ignore("Edit Occupation"){
-		When("I go to edit profile")
-		goToEditProfile()
-
-		And("randomly choose an occupation")
-		val newOccupation = selectRandomOption("occupation")
-		And("click on the save button")
-		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
-
-		When("I go to view profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		Then("I should be able to find an element with that occupation")	
-		xpath("//*[text()='" + newOccupation + "']")
+		dropDownTest("occupation")
 }
 
 ignore("Edit Education"){
-		When("I go to edit profile")
-		goToEditProfile()
-
-		And("randomly choose an education")
-		val newEducation = selectRandomOption("education")
-		And("click on the save button")
-		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
-
-		When("I go to view profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		Then("I should be able to find an element with that education")	
-		xpath("//*[text()='" + newEducation + "']")
+		dropDownTest("education")
 }
 
 ignore("Edit Annual Income"){
-		When("I go to edit profile")
-		goToEditProfile()
-
-		And("randomly choose an income")
-		val newIncome = selectRandomOption("income")
-		And("click on the save button")
-		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
-
-		When("I go to view profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		Then("I should be able to find an element with that annual income")	
-		xpath("//*[text()='" + newIncome + "']")
+		dropDownTest("income")
 }
 
 ignore("Edit Smokes"){
-		When("I go to edit profile")
-		goToEditProfile()
-
-		And("randomly choose a 'Smokes' option")
-		val newSmokes = selectRandomOption("smokes")
-		And("click on the save button")
-		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
-
-		When("I go to view profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		Then("I should be able to find an element with that 'Smokes' option")	
-		xpath("//*[text()='" + newSmokes + "']")
+		dropDownTest("smokes")
 }
 
 ignore("Edit Drinks"){
-		When("I go to edit profile")
-		goToEditProfile()
-
-		And("randomly choose a 'Drinks' option")
-		val newDrinks = selectRandomOption("drinks")
-		And("click on the save button")
-		click on cssSelector("#submit_basic_information")
-		Thread.sleep(5000)
-
-		When("I go to view profile")
-		click on linkText("Click here")
-		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
-
-		Then("I should be able to find an element with that 'Drinks' option")	
-		xpath("//*[text()='" + newDrinks + "']")
+		dropDownTest("drinks")
 }
 
 
-ignore("Edit About myself with valid input and save"){
+test("Edit About myself with valid input and save"){
 
 		var newAboutMyself = "This is me :" + r.nextInt().toString
 		When("I go to edit profile")
@@ -509,6 +315,25 @@ def goToEditProfile() : Unit = {
 		click on cssSelector("#profile_dd")
 		click on cssSelector("#profile_dd_li>ul>li>a[title='Edit Profile']")
 		click on id("title")
+}
+
+def dropDownTest(dropdownName : String) : Unit = {
+
+		When("I go to edit profile")
+		goToEditProfile()
+
+		And("randomly choose a value")
+		val newText = selectRandomOption(dropdownName)
+		And("click on the save button")
+		click on cssSelector("#submit_basic_information")
+		Thread.sleep(5000)
+
+		When("I go to view profile")
+		click on linkText("Click here")
+		assert(currentUrl == "http://www.mate1.com/nw/index#~/ref/profile/portrait")
+		Then("I should be able to find an element with the text " + newText)	
+		click on xpath("//*[text()='" + newText + "']")
+
 }	
 
 def getOptionsBySelectName(name: String) : List[String] = {
@@ -533,11 +358,13 @@ def selectRandomOption(selectName: String) : String = {
 	var optionNumber = r.nextInt(options.size)+1
 	var optionName = options(optionNumber-1) // List count starts from 0.
 
+	And("it has optionNumber " + optionNumber)
+
 	And("get its value using xpath")
 	var optionValue = xpath("//select[@name='" + selectName + "']/option["+optionNumber +"]").element.attribute("value").getOrElse("Not found")
 
 	// Select this option
-	And("Select the option "+optionName)
+	And("Select the option "+ optionName + " with optionValue " + optionValue)
 	singleSel(selectName).value = optionValue
 	
 	return optionName
@@ -603,24 +430,6 @@ def selectRandomOption(selectName: String) : String = {
    }
 
 }
-
-
-
-class EndpointTests extends Suites(new ProfileTests) with BeforeAndAfterAll with HtmlUnit {   
-
-  override def afterAll() {
-	quit()
-	println("Quitting all browser windows")
-  }
-}
-
-/**class TestSpec extends fixture.FunSpec with ShouldMatchers with BeforeAndAfter with BeforeAndAfterAll {
-   
-override def afterAll() = {
-      println("afterAll")
-   }     
-}*/
-
 
 
 
