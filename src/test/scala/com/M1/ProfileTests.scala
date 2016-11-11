@@ -7,6 +7,14 @@ import org.scalatest.time.Millis
 import org.scalatest.time.Seconds
 import java.util.logging._
 
+/** Test suite to do selenium tests of View Profile / Edit Profile in www.mate1.com
+ * 
+ *  Interact with each and all form fields and links in the “Edit Profile” page. 
+ *  Entering new information in “Edit my profile” and validating that each change took place by going into “View
+ *  Profile” and confirming that the new information is there being displayed to the end user.	
+ *  
+ */
+
 class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenThen with BeforeAndAfterAll {
 
 	override def afterAll() {
@@ -22,7 +30,7 @@ class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenTh
 
 	implicitlyWait(Span(30,Seconds))
 
-	login()
+	login("sohnya@gmail.com","verysecret")
 
 	ignore("Clicking on 'edit or update photo' takes you to the update photo page")(pending)
 
@@ -52,7 +60,7 @@ class ProfileTests extends FunSuite with HtmlUnit with Matchers with GivenWhenTh
 		// TODO : How to verify?
 	}
 
-	ignore("Edit Birth Date") { // OK
+test("Edit Birth Date") { // OK
 
 		When("I go to edit profile")
 		goToEditProfile()
@@ -289,7 +297,7 @@ ignore("Untick checkboxes, save, and see the corresponding field is missing in V
 		assert(!dietText.contains(label3))
 }
 
-test("Add a field at random in Favorite things, and validate them in View Profile"){
+ignore("Add a field at random in Favorite things, and validate them in View Profile"){
 
 	When("I go to Edit Profile")
 	goToEditProfile()
@@ -324,7 +332,6 @@ def calculateAge(year: Int, month:String, day: Int) : Int = {
 	var currentMonth = now.get(Calendar.MONTH)
 	val currentYear = now.get(Calendar.YEAR)
 	return 0;
-
 }
 
 def goToEditProfile() : Unit = {
@@ -420,10 +427,6 @@ def selectRandomOption(selectName: String) : String = {
 	And("Pick a random option name")
 	var optionNumber = r.nextInt(options.size)+1
 	var optionName = options(optionNumber-1) // List count starts from 0.
-
-	And("it has optionNumber " + optionNumber)
-
-	And("get its value using xpath")
 	var optionValue = xpath("//select[@name='" + selectName + "']/option["+optionNumber +"]").element.attribute("value").getOrElse("Not found")
 
 	// Select this option
@@ -434,7 +437,18 @@ def selectRandomOption(selectName: String) : String = {
 
 }
 
-		def getAge(day : Int, month : String, year : Int) : Int = {
+  /** Calculates the age
+   * 
+   *  @param day birthday day
+   *  @param month entire birthday month as a String, for example "January"
+   *  @param birthyear
+   *  @return age
+   */
+
+def getAge(day : Int, month : String, year : Int) : Int = {
+
+
+			info("day:" +day + ", month:" + month + ",year:"+year)
 
 			val monthNameToNumber = Map(
     				"January"  -> 0,
@@ -459,20 +473,21 @@ def selectRandomOption(selectName: String) : String = {
 			var age = 0	
 
 			if(monthInt < currentMonth || (monthInt==currentMonth && day <= currentDay)){
-				age = currentYear - year - 1
+				age = currentYear - year
 			}else{
-				age = currentYear - year - 2
+				age = currentYear - year - 1
 			}
 			return age
 		}
 
   /**
-   * @return Logs in using (for the moment) fixed email and password,
-   * by going to the website, clicking on the 'Login here' link, 
+   * Logs in using by going to the website, clicking on the 'Login here' link, 
    * writing login information in the following iframe, and clicking "Save"
+   * @param email the email adress
+   * @param password the password
    */
 
-   def login( ) : Unit = {
+   def login(email: String, password: String) : Unit = {
 	go to "http://www.mate1.com"
 
 	// Click on the link 'Login here'
@@ -482,10 +497,10 @@ def selectRandomOption(selectName: String) : String = {
 	switch to frame(cssSelector("#ajax_flow_holder>.iframe-container>iframe"))
 
 	// Write my email in the email field
-	textField("email").value="sohnya@gmail.com"
+	textField("email").value=email
 
 	// Write my password in the password field
-	pwdField("password").value="verysecret"	
+	pwdField("password").value=password
 
 	// And click on the Login button
 

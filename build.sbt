@@ -12,3 +12,5 @@ libraryDependencies += "org.pegdown"    %  "pegdown"     % "1.6.0"  % "test";
 testOptions in Test ++= Seq(Tests.Argument(TestFrameworks.ScalaTest, "-o"), Tests.Argument(TestFrameworks.ScalaTest, "-h", "reports"));
 
 testOptions in Test += Tests.Argument("-oD");
+
+target in Test in doc := baseDirectory.value / "docs";

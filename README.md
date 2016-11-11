@@ -16,4 +16,9 @@ Note: By default, the tests are set to ignore.
 
 Test results can be found in the folder "reports". 
 
+Test documentation can be fount in the folder "docs"
+
+To update documentation with sbt, do
+sbt test:doc 
+
 
